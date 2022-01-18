@@ -4,7 +4,10 @@
     Authors: Brit, Julian, Michael
 
 */
-const fetchSearch = () => {
+//global variable
+var carouselPlaceholder = 0;
+
+const fetchSearch = () => { //grabs selected data and sends it to printCarousel
     const checkboxes = document.getElementsByClassName("checkbox")
     const numBoxes = checkboxes.length();
     let searchParams = [];
@@ -54,4 +57,56 @@ const fetchSearch = () => {
         .catch(err => {
             console.error(err);
         });
+}
+
+//print the carousel
+const printCarousel = (objArr) => {
+    const carouselElts = document.getElementsByClassName("carousel_card");
+    for (let i = 0; i < carouselElts.length(); i++) { // for the carousel
+        let truePlace = i + carouselPlaceholder; //allows cycling through carousel
+        if (carouselElts[i] && objArr[truePlace]) { //if it exists fill it
+            let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
+            let drinkIngredients, drinkAmount = []
+            //lookup by id for full details
+            fetch(`https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${objArr[i].idDrink}`, {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                        "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
+                    }
+                })
+                .then(response => {
+                    return response.drinks[i] //grab respective drink object
+                })
+                .then(data => { // destructure array
+                    drinkId = data.idDrink;
+                    drinkName = data.strDrink;
+                    drinkTags = data.strTags;
+                    drinkCategory = data.strCategory;
+                    drinkInstructionsEN = data.strInstructions;
+                    drinkImageSource = data.strImageSource;
+                    for (let i = 0; i < 15; i++) {
+                        const ingredientPath = `data.strIngredient${i}`
+                        const curIngr = eval(ingredientPath)
+                        if (curIngr) {
+                            drinkIngredients[i] = curIngr //add drink ingredients if they exist
+                        }
+                        const amountPath = `data.strMeasure${i}`
+                        const curAmt = eval(amountPath)
+                        if (curAmt) {
+                            drinkAmount[i] = curAmt //add amount of ingredient if they exist
+                        }
+                    }
+
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+            //actually print to the carousel card !!GUESTIMATE!!
+            const curCard = carouselElts[i]
+            curCard.children[0].setAttribute("src", drinkImageSource)
+            curCard.children[1].innerText = drinkName
+            curCard.children[2].innerText = drinkInstructionsEN
+        }
+    }
 }
