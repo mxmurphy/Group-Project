@@ -1,4 +1,6 @@
 
+/*saving hex codes for sake of sanity blue- #696D7D, green- #6F9283*/
+
 .titleBoxDiv {
     color: #6F9283;
     border: 3px groove #6F9283;
@@ -8,21 +10,79 @@
     font-size: 48px;
 }
 
+/* main content divs */
+.indexContentDiv {
+    color: #000;
+    border: 2px groove #6F9283;
+    width: 100%;
+    font-family: "Oswald";
+    position: absolute;
+    float: right;
+    overflow: auto;
+}
 
-.parallaxElement {
-    height: 100%;
+/*
+.findContentDiv {
+    color: #000;
+    border: 2px groove #6F9283;
+    width: 100%;
+    font-family: "Oswald";
+    position: absolute;
+    float: right;
+}*/
+
+.formBox {
+    border: 1px solid #6F9283;
+    border-width: auto;
+    text-align: center;
+    float: right;
+}
+
+.burgerCage {
+    width: 30%;
+    position: relative;
+}
+/* hamburger menu. Welcome to Mcdonalds */
+.hamburgerNavClick {
+    overflow: hidden;
+    background-color: #6F9283;
+    position: relative;
   }
   
-  .parallax {
-    /* The image used */
-    background-image: url("https://i.imgur.com/PCfnKXH.jpg?1");
-  
-    /* Full height */
-    height: 100%;
-  
-    /* Create the parallax scrolling effect */
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  /* Hide the links inside the navigation menu (except for logo/home) */
+  .hamburgerNavClick #otherLinks {
+    display: none;
   }
+  
+  /* Style navigation menu links */
+  .hamburgerNavClick a {
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    display: block;
+    margin-left: 35px;
+  }
+  
+  /* Style the hamburger menu */
+  .hamburgerNavClick a.icon {
+    background: #6F9283;
+    display: block;
+    position: absolute;
+    margin-left: 0;
+    top: 0;
+  }
+  
+  /* Add a grey background color on mouse-over */
+  .hamburgerNavClick a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Style the active link (or home/logo) */
+  .active {
+    background-color: #6F9283;
+    color: white;
+    margin-left: 35px;
+  }
+  
