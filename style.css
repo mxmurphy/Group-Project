@@ -1,19 +1,45 @@
 
-/*saving hex codes for sake of sanity blue- #696D7D, green- #6F9283*/
+/*saving hex codes for sake of sanity blue- #696D7D, green- #691613*/
 
 .titleBoxDiv {
-    color: #6F9283;
-    border: 3px groove #6F9283;
+    border: 3px groove #691613;
+    background-image: url(https://i.imgur.com/Dthb0gW.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
     width: 100%;
+    height: 25rem;
+}
+#titleBoxText {
+    color: #f2a102;
+    padding-top: 10%;
     text-align: center;
-    font-family: "Dongle";
+    font-family: "Oswald";
     font-size: 48px;
+}
+
+
+/* I don't eat hamburgers anyway so have a nav bar instead */
+.navigationBox {
+    display: block;
+    width: 100vw;
+    height: 5%;
+    float: left;
+    background-color: #691613;
+    font-size: 17px;
+    text-align: center;
+} 
+.navigationBox a {
+    text-decoration: none;
+    color: #fff;
+}
+.navigationBox a:hover {
+    color: #f2a102;
 }
 
 /* main content divs */
 .indexContentDiv {
     color: #000;
-    border: 2px groove #6F9283;
+    border: 2px groove #691613;
     width: 100%;
     font-family: "Oswald";
     position: absolute;
@@ -21,54 +47,59 @@
     overflow: auto;
 }
 
-
-.findContentDiv {
+/* not sure why this got doubled but I am squeamish about losing things
+.recipeContentDiv {
     color: #000;
-    border: 2px groove #6F9283;
+    border: 2px groove #691613;
     width: 100%;
     font-family: "Oswald";
     position: absolute;
     float: right;
-}
+}*/
 
+/* this carousel will be the death of me :) */
 .recipeCarouselDiv {
-    color: rgb(0, 0, 0);
-    width: 40%;
+    border: 2px solid #691613;
+    color: #000;
+    width: 82%;
     font-family: Oswald;
     float: right;
 }
 
+
+/* for the recipes user saves */
 .savedStuff {
     color: black;
     width: 15%;
     float: left;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(105, 22, 19);
-    border-image: initial;
+    position: static;
+    border: 1px solid #691613;
     overflow: auto;
 }
 .savedStuff ul {
     list-style-type: none;
 }
 
+ /*aggregated shopping list which I am very much so quitting on*/
 .shopList {
-    width: 15%;
+    width: 100%;
     float: right;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(105, 22, 19);
-    border-image: initial;
+    position: static;
+    margin-top: 2%;
+    border: 1px solid #691613;
 }
 
+/* it's a box.  with a form in it */
 .formBox {
-    border: 1px solid #6F9283;
     border-width: auto;
     text-align: center;
     float: right;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 input[type="submit"], input[type="reset"] {
-    background-color: rgb(105, 22, 19);
+    background-color: #691613;
     color: white;
     cursor: pointer;
     border-width: initial;
@@ -80,16 +111,7 @@ input[type="submit"], input[type="reset"] {
     margin: 4px 2px;
 }
 
-.navigationBox {
-    display: block;
-    width: 100vw;
-    height: 5%;
-    float: left;
-    background-color: rgb(105, 22, 19);
-    font-size: 17px;
-    text-align: center;
-    color: rgb(255, 255, 255);
-}  
+ 
 /*
     code by Iatek LLC 2018 - CC 2.0 License - Attribution required
     code customized by Azmind.com
