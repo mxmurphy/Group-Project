@@ -68,25 +68,31 @@
 
 
 /* for the recipes user saves */
-.savedStuff {
-    color: black;
-    width: 15%;
-    float: left;
-    position: static;
-    border: 1px solid #691613;
-    overflow: auto;
-}
-.savedStuff ul {
-    list-style-type: none;
-}
-
- /*aggregated shopping list which I am very much so quitting on*/
-.shopList {
+.recipesForReal {
     width: 100%;
     float: right;
     position: static;
     margin-top: 2%;
-    border: 1px solid #691613;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #691613;
+    border-image: initial;
+}
+
+ /*aggregated shopping list which is no longer aggrevating me*/
+.theList {
+    color: black;
+    width: 15%;
+    float: left;
+    position: static;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(105, 22, 19);
+    border-image: initial;
+    overflow: auto;
+}
+.theList ul {
+    list-style-type: none;
 }
 
 /* it's a box.  with a form in it */
