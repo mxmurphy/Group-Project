@@ -6,13 +6,20 @@
 */
 
 window.addEventListener("load", loadEvents);
-let randInfo;
-let recInfo;
+
 //creates event listeners and performs other actions when page loads
 function loadEvents() {
 	if (document.getElementById("randBtn")) {
 		//if the document has the random drink button
 		fillThumb();
+	}
+	if (document.getElementById("drinkContainer")) {
+		let cookie = getCookie("recId");
+		if (cookie) {
+			fillInfo(cookie);
+		} else {
+			fillInfo("none");
+		}
 	}
 }
 
@@ -107,7 +114,81 @@ function fillThumb() {
 }
 
 //fill a card with info on a drink
-function fillCard(id) {}
+function fillInfo(id) {
+	let drink, drId, name, img, type, glass, instruction, drinkList;
+	let ingredient,
+		measure = [];
+	document.getElementById("ingList").innerHTML = "";
+	//fetch a list of popular drinks
+	fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
+		method: "GET",
+		headers: {
+			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+			"x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+		},
+	})
+		.then((response) => {
+			return response.body;
+		})
+		// obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+		.then((body) => {
+			const reader = body.getReader();
+			return new ReadableStream({
+				start(controller) {
+					return pump();
+
+					function pump() {
+						return reader.read().then(({ done, value }) => {
+							// When no more data needs to be consumed, close the stream
+							if (done) {
+								controller.close();
+								return;
+							}
+							// Enqueue the next data chunk into our target stream
+							const data = JSON.parse(Decodeuint8arr(value));
+							drinkList = data.drinks;
+							for (let i = 0; i < drinkList.length; i++) {
+								let li = document.createElement("li");
+								li.innerText = drinkList[i].strDrink;
+								document.getElementById("popList").appendChild(li);
+							}
+							if (id === "none") {
+								drink = drinkList[0];
+							} else {
+								drink = drinkList[0];
+								/* search elements go here to find correct drink info */
+							}
+							drId = drink.idDrink;
+							name = drink.strDrink;
+							img = drink.strDrinkThumb;
+							type = drink.strAlcoholic;
+							glass = drink.strGlass;
+							instruction = drink.strInstructions;
+
+							//there has to be a better way to do this, but my brain is scrambled so I'll come back later
+
+							document.getElementById("drinkName").innerText = name;
+							document.getElementById("type").innerText = type;
+							document.getElementById("glass").innerText = glass;
+							document.getElementById("instructions").innerText = instruction;
+							document.getElementById("img").setAttribute("src", img);
+
+							//I'll try to make this loop iterate effectively
+							// for (let i = 1; i <= 15; i++) {
+							// 	let li = document.createElement("li");
+							// 	li.innerText = drink.strMeasure1 + " " + drink.strMeasure2;
+							// 	document.getElementById("ingList").appendChild(li);
+							// }
+							return pump();
+						});
+					}
+				},
+			});
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+}
 
 //function to create shopping list cookie
 function createCookie(name, value) {
