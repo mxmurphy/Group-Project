@@ -6,11 +6,108 @@
 */
 
 window.addEventListener("load", loadEvents);
-
+let randInfo;
+let recInfo;
 //creates event listeners and performs other actions when page loads
 function loadEvents() {
-	
+	if (document.getElementById("randBtn")) {
+		//if the document has the random drink button
+		fillThumb();
+	}
 }
+
+//decode uint8
+function Decodeuint8arr(uint8array) {
+	return new TextDecoder("utf-8").decode(uint8array);
+}
+
+//function to get a random cocktail
+function fillThumb() {
+	//fetch a random drink
+	fetch("https://the-cocktail-db.p.rapidapi.com/random.php", {
+		method: "GET",
+		headers: {
+			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+			"x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+		},
+	})
+		.then((response) => {
+			return response.body;
+		})
+		// obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+		.then((body) => {
+			const reader = body.getReader();
+			return new ReadableStream({
+				start(controller) {
+					return pump();
+
+					function pump() {
+						return reader.read().then(({ done, value }) => {
+							// When no more data needs to be consumed, close the stream
+							if (done) {
+								controller.close();
+								return;
+							}
+							// Enqueue the next data chunk into our target stream
+							const data = JSON.parse(Decodeuint8arr(value));
+							console.log(data);
+							let randImg = data.drinks[0].strDrinkThumb;
+							document.getElementById("randBtn").setAttribute("src", randImg);
+							randInfo = data.drinks[0].idDrink; //store drink id in case visitor wants more info
+							return pump();
+						});
+					}
+				},
+			});
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+	//fetch a list of popular drinks
+	fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
+		method: "GET",
+		headers: {
+			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+			"x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+		},
+	})
+		.then((response) => {
+			return response.body;
+		})
+		// obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+		.then((body) => {
+			const reader = body.getReader();
+			return new ReadableStream({
+				start(controller) {
+					return pump();
+
+					function pump() {
+						return reader.read().then(({ done, value }) => {
+							// When no more data needs to be consumed, close the stream
+							if (done) {
+								controller.close();
+								return;
+							}
+							// Enqueue the next data chunk into our target stream
+							const data = JSON.parse(Decodeuint8arr(value));
+							console.log(data);
+							let recImg = data.drinks[0].strDrinkThumb;
+							document.getElementById("recBtn").setAttribute("src", recImg);
+							recInfo = data.drinks[0].idDrink; //store drink id in case visitor wants more info
+							fillCard(recInfo);
+							return pump();
+						});
+					}
+				},
+			});
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+}
+
+//fill a card with info on a drink
+function fillCard(id) {}
 
 //function to create shopping list cookie
 function createCookie(name, value) {
@@ -47,8 +144,7 @@ const printOptions = () => {
 		method: "GET",
 		headers: {
 			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-			"x-rapidapi-key":
-				"51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
+			"x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
 		},
 	}) //grab all ingredients
 		.then((response) => {
@@ -86,9 +182,7 @@ const fetchSearch = () => {
 	}
 	//check if wants cocktail or normal drink
 	const isCocktail = document.getElementById("cocktail_box").checked;
-	const isNotCocktail = document.getElementById(
-		"without_cocktail_box"
-	).checked;
+	const isNotCocktail = document.getElementById("without_cocktail_box").checked;
 	if (isCocktail && isNotCocktail) {
 		//ignore for both otherwise add respective param
 	} else if (isCocktail) {
@@ -97,17 +191,13 @@ const fetchSearch = () => {
 		formattedParam += "c=Ordinary_Drink";
 	}
 	//fetch time
-	fetch(
-		`https://the-cocktail-db.p.rapidapi.com/filter.php?${formattedParam}`,
-		{
-			method: "GET",
-			headers: {
-				"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-				"x-rapidapi-key":
-					"51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
-			},
-		}
-	)
+	fetch(`https://the-cocktail-db.p.rapidapi.com/filter.php?${formattedParam}`, {
+		method: "GET",
+		headers: {
+			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+			"x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
+		},
+	})
 		.then((response) => {
 			printCarousel(response.drinks); // call next function with data
 		})
@@ -121,26 +211,17 @@ const printCarousel = (objArr) => {
 	for (let i = 0; i < objArr.length(); i++) {
 		if (objArr[i]) {
 			//if it exists print it
-			let drinkId,
-				drinkName,
-				drinkCategory,
-				drinkTags,
-				drinkInstructionsEN,
-				drinkImageSource;
+			let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
 			let drinkIngredients,
 				drinkAmounts = [];
 			//lookup by id for full details
-			fetch(
-				`https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${objArr[i].idDrink}`,
-				{
-					method: "GET",
-					headers: {
-						"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-						"x-rapidapi-key":
-							"51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
-					},
-				}
-			)
+			fetch(`https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${objArr[i].idDrink}`, {
+				method: "GET",
+				headers: {
+					"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+					"x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
+				},
+			})
 				.then((response) => {
 					return response.drinks[i]; //grab respective drink object
 				})
@@ -170,9 +251,7 @@ const printCarousel = (objArr) => {
 				});
 			//actually print to the carousel card
 			//curCard.children[2].innerText = drinkInstructionsEN
-			const container = document.getElementById(
-				"carousel_item_container"
-			);
+			const container = document.getElementById("carousel_item_container");
 			container.innerHTML = `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
                 <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
              <p>${drinkInstructionsEN}</p>
@@ -194,13 +273,9 @@ const printCarousel = (objArr) => {
 					for (var i = 0; i < it; i++) {
 						// append slides to end
 						if (e.direction == "left") {
-							$(".carousel-item")
-								.eq(i)
-								.appendTo(".carousel-inner");
+							$(".carousel-item").eq(i).appendTo(".carousel-inner");
 						} else {
-							$(".carousel-item")
-								.eq(0)
-								.appendTo(".carousel-inner");
+							$(".carousel-item").eq(0).appendTo(".carousel-inner");
 						}
 					}
 				}
