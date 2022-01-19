@@ -6,9 +6,22 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Cocktail Connoisseur</title>
+	<script src="fstdropdown.js"></script>
+	<!--pretty sure this is supposed to go up here as it changes how elements render-->
+	<link rel="stylesheet" href="fstdropdown.css">
 </head>
 
 <body>
+	<div id="selection_container">
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" role="switch" id="alcohol_box">
+			<label class="form-check-label" for="alcohol_box">Alcoholic?</label>
+		</div>
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" role="switch" id="cocktail_box">
+			<label class="form-check-label" for="cocktail_box">Cocktail?</label>
+		</div>
+	</div>
 	<div id="info_container">
 		<div class="container-fluid">
 			<div id="carousel-example" class="carousel slide" data-ride="carousel">

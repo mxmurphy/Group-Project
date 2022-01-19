@@ -33,6 +33,24 @@ function deleteCookie(name) {
     document.cookie = `${name}=; max-age=0`;
 }
 
+//grabs available search terms and print as checklist
+const printOptions = () => {
+    const container = document.getElementById("selection_container")
+    fetch("https://the-cocktail-db.p.rapidapi.com/list.php?i=list", {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
+            }
+        }) //grab all ingredients
+        .then(response => {
+            console.log(response);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
 const fetchSearch = () => { //grabs selected data and sends it to printCarousel
     const checkboxes = document.getElementsByClassName("checkbox")
     const numBoxes = checkboxes.length();
@@ -51,12 +69,9 @@ const fetchSearch = () => { //grabs selected data and sends it to printCarousel
     }
     //check if wants alcholic drink
     const isAlcoholic = document.getElementById("alcohol_box").checked
-    const isNotAlcoholic = document.getElementById("without_alcohol_box").checked
-    if (isAlcoholic && isNotAlcoholic) {
-        //ignore for both otherwise add respective param
-    } else if (isAlcoholic) {
+    if (isAlcoholic) {
         formattedParam += "a=Alcoholic"
-    } else if (isNotAlcoholic) {
+    } else {
         formattedParam += "a=Non-Alcoholic"
     }
     //check if wants cocktail or normal drink
@@ -126,17 +141,14 @@ const printCarousel = (objArr) => {
                 .catch(err => {
                     console.error(err);
                 });
-            //actually print to the carousel card !!GUESTIMATE!!
-            //const curCard = carouselElts[i]
-            //curCard.children[0].setAttribute("src", drinkImageSource)
-            //curCard.children[1].innerText = drinkName
+            //actually print to the carousel card
             //curCard.children[2].innerText = drinkInstructionsEN
             const container = document.getElementById("carousel_item_container")
             container.innerHTML = `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
                 <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
              <p>${drinkInstructionsEN}</p>
              </div>`
-            //printInstructions(drinkIngredients, drinkAmounts)
+            //printIngredients(drinkIngredients, drinkAmounts)
             //Carousel Event listener
             $('#carousel-example').on('slide.bs.carousel', function (e) {
                 /*
