@@ -5,35 +5,32 @@
 
 */
 
-//global variable
-var carouselPlaceholder = 0;
-
 //function to create shopping list cookie
 function createCookie(name, value) {
-	//adds a cookie to the document with a given name and value
-	//can also be used to update a cookie
-	document.cookie = `${name}=${value};`;
+    //adds a cookie to the document with a given name and value
+    //can also be used to update a cookie
+    document.cookie = `${name}=${value};`;
 }
 
 //function that uses cookies to recreate list
 function getCookie(name) {
-	//create an array of each cookie
-	let cookieArray = document.cookie.split(";");
-	//loop through array
-	for (let i = 0; i < cookieArray.length; i++) {
-		let pair = cookieArray[i].split("="); //splits string into 2 elements, the name and value
-		if (pair[0].trim() === name) {
-			//if the name is the same as the search query
-			return pair[1].trim(); //returns value of cookie
-		}
-	}
-	return null; //null if provided name is not in cookie
+    //create an array of each cookie
+    let cookieArray = document.cookie.split(";");
+    //loop through array
+    for (let i = 0; i < cookieArray.length; i++) {
+        let pair = cookieArray[i].split("="); //splits string into 2 elements, the name and value
+        if (pair[0].trim() === name) {
+            //if the name is the same as the search query
+            return pair[1].trim(); //returns value of cookie
+        }
+    }
+    return null; //null if provided name is not in cookie
 }
 
 //function to delete a cookie when given a name
 function deleteCookie(name) {
-	//sets value of cookie with name to nothing, and sets max-age to 0 so it deletes
-	document.cookie = `${name}=; max-age=0`;
+    //sets value of cookie with name to nothing, and sets max-age to 0 so it deletes
+    document.cookie = `${name}=; max-age=0`;
 }
 
 const fetchSearch = () => { //grabs selected data and sends it to printCarousel
@@ -90,12 +87,10 @@ const fetchSearch = () => { //grabs selected data and sends it to printCarousel
 
 //print the carousel
 const printCarousel = (objArr) => {
-    const carouselElts = document.getElementsByClassName("carousel_card");
-    for (let i = 0; i < carouselElts.length(); i++) { // for the carousel
-        let truePlace = i + carouselPlaceholder; //allows cycling through carousel
-        if (carouselElts[i] && objArr[truePlace]) { //if it exists fill it
+    for (let i = 0; i < objArr.length(); i++) {
+        if (objArr[i]) { //if it exists print it
             let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
-            let drinkIngredients, drinkAmount = []
+            let drinkIngredients, drinkAmounts = []
             //lookup by id for full details
             fetch(`https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${objArr[i].idDrink}`, {
                     "method": "GET",
@@ -123,7 +118,7 @@ const printCarousel = (objArr) => {
                         const amountPath = `data.strMeasure${i}`
                         const curAmt = eval(amountPath)
                         if (curAmt) {
-                            drinkAmount[i] = curAmt //add amount of ingredient if they exist
+                            drinkAmounts[i] = curAmt //add amount of ingredient if they exist
                         }
                     }
 
@@ -132,11 +127,39 @@ const printCarousel = (objArr) => {
                     console.error(err);
                 });
             //actually print to the carousel card !!GUESTIMATE!!
-            const curCard = carouselElts[i]
-            curCard.children[0].setAttribute("src", drinkImageSource)
-            curCard.children[1].innerText = drinkName
-            curCard.children[2].innerText = drinkInstructionsEN
+            //const curCard = carouselElts[i]
+            //curCard.children[0].setAttribute("src", drinkImageSource)
+            //curCard.children[1].innerText = drinkName
+            //curCard.children[2].innerText = drinkInstructionsEN
+            const container = document.getElementById("carousel_item_container")
+            container.innerHTML = `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
+                <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
+             <p>${drinkInstructionsEN}</p>
+             </div>`
+            //printInstructions(drinkIngredients, drinkAmounts)
+            //Carousel Event listener
+            $('#carousel-example').on('slide.bs.carousel', function (e) {
+                /*
+                    CC 2.0 License Iatek LLC 2018 - Attribution required
+                    obtained on 1/19/22 at https://azmind.com/bootstrap-carousel-multiple-items/
+                */
+                var $e = $(e.relatedTarget);
+                var idx = $e.index();
+                var itemsPerSlide = 5;
+                var totalItems = $('.carousel-item').length;
+
+                if (idx >= totalItems - (itemsPerSlide - 1)) {
+                    var it = itemsPerSlide - (totalItems - idx);
+                    for (var i = 0; i < it; i++) {
+                        // append slides to end
+                        if (e.direction == "left") {
+                            $('.carousel-item').eq(i).appendTo('.carousel-inner');
+                        } else {
+                            $('.carousel-item').eq(0).appendTo('.carousel-inner');
+                        }
+                    }
+                }
+            });
         }
     }
 }
-
