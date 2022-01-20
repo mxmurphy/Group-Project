@@ -326,7 +326,7 @@ async function fillInfo(id) {
 							drinkList = data.drinks;
 							for (let i = 0; i < drinkList.length; i++) {
 								let li = document.createElement("li");
-								li.innerHTML = `${drinkList[i].strDrink}`;
+								li.innerHTML = `<a href=#>${drinkList[i].strDrink}</a>`;
 								li.style.border = "3px solid navy";
 								li.style.margin = "5px";
 								li.addEventListener("click", updatePopular);
