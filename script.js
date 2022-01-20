@@ -5,22 +5,45 @@
 
 */
 
+let drinkList = [];
+
 window.addEventListener("load", loadEvents);
 
 //creates event listeners and performs other actions when page loads
-function loadEvents() {
+async function loadEvents() {
 	if (document.getElementById("randBtn")) {
 		//if the document has the random drink button
 		fillThumb();
 	}
 	if (document.getElementById("drinkContainer")) {
-		let cookie = getCookie("recId");
-		if (cookie) {
-			fillInfo(cookie);
-		} else {
-			fillInfo("none");
+		await fillInfo("none");
+		for (let i = 0; i < document.getElementById("popList").children.length; i++) {
+			document.getElementById("popList").children[i].addEventListener("click", updatePopular);
 		}
 	}
+}
+
+function updatePopular(evt) {
+	let drink, drId, name, img, type, glass, instruction;
+	for (let i = 0; i < drinkList.length; i++) {
+		if (evt.target.innerText === drinkList[i].strDrink) {
+			drink = drinkList[i];
+		}
+	}
+	drId = drink.idDrink;
+	name = drink.strDrink;
+	img = drink.strDrinkThumb;
+	type = drink.strAlcoholic;
+	glass = drink.strGlass;
+	instruction = drink.strInstructions;
+
+	fillIng(drink);
+
+	document.getElementById("drinkName").innerText = name;
+	document.getElementById("type").innerText = type;
+	document.getElementById("glass").innerText = glass;
+	document.getElementById("instructions").innerText = instruction;
+	document.getElementById("img").setAttribute("src", img);
 }
 
 //decode uint8
@@ -28,7 +51,7 @@ function Decodeuint8arr(uint8array) {
 	return new TextDecoder("utf-8").decode(uint8array);
 }
 
-//function to get a random cocktail
+//function to get a random cocktail image to fill into thumbnails
 function fillThumb() {
 	//fetch a random drink
 	fetch("https://the-cocktail-db.p.rapidapi.com/random.php", {
@@ -113,11 +136,165 @@ function fillThumb() {
 		});
 }
 
+//150 lines of some innefficient bs
+function fillIng(drink) {
+	//clear out any previous list before filling with new ingredients
+	document.getElementById("ingList").innerHTML = "";
+	//1st ingredient
+	if (drink.strIngredient1) {
+		let ing1 = document.createElement("li");
+		if (drink.strMeasure1) {
+			ing1.innerText = `${drink.strMeasure1} ${drink.strIngredient1}`;
+		} else {
+			ing1.innerText = drink.strIngredient1;
+		}
+		document.getElementById("ingList").appendChild(ing1);
+	}
+	//2nd ingredient
+	if (drink.strIngredient2) {
+		let ing2 = document.createElement("li");
+		if (drink.strMeasure2) {
+			ing2.innerText = `${drink.strMeasure2} ${drink.strIngredient2}`;
+		} else {
+			ing2.innerText = drink.strIngredient2;
+		}
+		document.getElementById("ingList").appendChild(ing2);
+	}
+	//3rd ingredient
+	if (drink.strIngredient3) {
+		let ing3 = document.createElement("li");
+		if (drink.strMeasure3) {
+			ing3.innerText = `${drink.strMeasure3} ${drink.strIngredient3}`;
+		} else {
+			ing3.innerText = drink.strIngredient3;
+		}
+		document.getElementById("ingList").appendChild(ing3);
+	}
+	//4th ingredient
+	if (drink.strIngredient4) {
+		let ing4 = document.createElement("li");
+		if (drink.strMeasure1) {
+			ing4.innerText = `${drink.strMeasure4} ${drink.strIngredient4}`;
+		} else {
+			ing4.innerText = drink.strIngredient4;
+		}
+		document.getElementById("ingList").appendChild(ing4);
+	}
+	//5th ingredient
+	if (drink.strIngredient5) {
+		let ing5 = document.createElement("li");
+		if (drink.strMeasure5) {
+			ing5.innerText = `${drink.strMeasure5} ${drink.strIngredient5}`;
+		} else {
+			ing5.innerText = drink.strIngredient5;
+		}
+		document.getElementById("ingList").appendChild(ing5);
+	}
+	//6th ingredient
+	if (drink.strIngredient6) {
+		let ing6 = document.createElement("li");
+		if (drink.strMeasure6) {
+			ing6.innerText = `${drink.strMeasure6} ${drink.strIngredient6}`;
+		} else {
+			ing6.innerText = drink.strIngredient6;
+		}
+		document.getElementById("ingList").appendChild(ing6);
+	}
+	//7th ingredient
+	if (drink.strIngredient7) {
+		let ing7 = document.createElement("li");
+		if (drink.strMeasure7) {
+			ing7.innerText = `${drink.strMeasure7} ${drink.strIngredient7}`;
+		} else {
+			ing7.innerText = drink.strIngredient7;
+		}
+		document.getElementById("ingList").appendChild(ing7);
+	}
+	//8th ingredient
+	if (drink.strIngredient8) {
+		let ing8 = document.createElement("li");
+		if (drink.strMeasure8) {
+			ing8.innerText = `${drink.strMeasure8} ${drink.strIngredient8}`;
+		} else {
+			ing8.innerText = drink.strIngredient8;
+		}
+		document.getElementById("ingList").appendChild(ing8);
+	}
+	//9th ingredient
+	if (drink.strIngredient9) {
+		let ing9 = document.createElement("li");
+		if (drink.strMeasure9) {
+			ing9.innerText = `${drink.strMeasure9} ${drink.strIngredient9}`;
+		} else {
+			ing9.innerText = drink.strIngredient9;
+		}
+		document.getElementById("ingList").appendChild(ing9);
+	}
+	//10th ingredient
+	if (drink.strIngredient10) {
+		let ing10 = document.createElement("li");
+		if (drink.strMeasure10) {
+			ing10.innerText = `${drink.strMeasure10} ${drink.strIngredient10}`;
+		} else {
+			ing10.innerText = drink.strIngredient10;
+		}
+		document.getElementById("ingList").appendChild(ing10);
+	}
+	//11th ingredient
+	if (drink.strIngredient11) {
+		let ing11 = document.createElement("li");
+		if (drink.strMeasure11) {
+			ing11.innerText = `${drink.strMeasure11} ${drink.strIngredient11}`;
+		} else {
+			ing11.innerText = drink.strIngredient11;
+		}
+		document.getElementById("ingList").appendChild(ing11);
+	}
+	//12th ingredient
+	if (drink.strIngredient2) {
+		let ing12 = document.createElement("li");
+		if (drink.strMeasure12) {
+			ing12.innerText = `${drink.strMeasure12} ${drink.strIngredient12}`;
+		} else {
+			ing12.innerText = drink.strIngredient12;
+		}
+		document.getElementById("ingList").appendChild(ing12);
+	}
+	//13th ingredient
+	if (drink.strIngredient13) {
+		let ing13 = document.createElement("li");
+		if (drink.strMeasure13) {
+			ing13.innerText = `${drink.strMeasure13} ${drink.strIngredient13}`;
+		} else {
+			ing13.innerText = drink.strIngredient13;
+		}
+		document.getElementById("ingList").appendChild(ing1);
+	}
+	//14th ingredient
+	if (drink.strIngredient14) {
+		let ing14 = document.createElement("li");
+		if (drink.strMeasure14) {
+			ing14.innerText = `${drink.strMeasure14} ${drink.strIngredient14}`;
+		} else {
+			ing14.innerText = drink.strIngredient14;
+		}
+		document.getElementById("ingList").appendChild(ing14);
+	}
+	//15th ingredient
+	if (drink.strIngredient15) {
+		let ing15 = document.createElement("li");
+		if (drink.strMeasure15) {
+			ing15.innerText = `${drink.strMeasure15} ${drink.strIngredient15}`;
+		} else {
+			ing15.innerText = drink.strIngredient15;
+		}
+		document.getElementById("ingList").appendChild(ing15);
+	}
+}
+
 //fill a card with info on a drink
-function fillInfo(id) {
-	let drink, drId, name, img, type, glass, instruction, drinkList;
-	let ingredient,
-		measure = [];
+async function fillInfo(id) {
+	let drink, drId, name, img, type, glass, instruction;
 	document.getElementById("ingList").innerHTML = "";
 	//fetch a list of popular drinks
 	fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
@@ -149,15 +326,14 @@ function fillInfo(id) {
 							drinkList = data.drinks;
 							for (let i = 0; i < drinkList.length; i++) {
 								let li = document.createElement("li");
-								li.innerText = drinkList[i].strDrink;
+								li.innerHTML = `${drinkList[i].strDrink}`;
+								li.style.border = "3px solid navy";
+								li.style.margin = "5px";
+								li.addEventListener("click", updatePopular);
 								document.getElementById("popList").appendChild(li);
 							}
-							if (id === "none") {
-								drink = drinkList[0];
-							} else {
-								drink = drinkList[0];
-								/* search elements go here to find correct drink info */
-							}
+							drink = drinkList[0];
+
 							drId = drink.idDrink;
 							name = drink.strDrink;
 							img = drink.strDrinkThumb;
@@ -165,7 +341,7 @@ function fillInfo(id) {
 							glass = drink.strGlass;
 							instruction = drink.strInstructions;
 
-							//there has to be a better way to do this, but my brain is scrambled so I'll come back later
+							fillIng(drink);
 
 							document.getElementById("drinkName").innerText = name;
 							document.getElementById("type").innerText = type;
@@ -173,12 +349,6 @@ function fillInfo(id) {
 							document.getElementById("instructions").innerText = instruction;
 							document.getElementById("img").setAttribute("src", img);
 
-							//I'll try to make this loop iterate effectively
-							// for (let i = 1; i <= 15; i++) {
-							// 	let li = document.createElement("li");
-							// 	li.innerText = drink.strMeasure1 + " " + drink.strMeasure2;
-							// 	document.getElementById("ingList").appendChild(li);
-							// }
 							return pump();
 						});
 					}
